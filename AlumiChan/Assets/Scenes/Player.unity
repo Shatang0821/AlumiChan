@@ -483,7 +483,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1237748487}
   m_Layer: 0
-  m_Name: BalPoint
+  m_Name: BulletPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1028,6 +1028,8 @@ MonoBehaviour:
   knockbackForce: {x: 10, y: 0}
   knockbackDuration: 0.2
   AuBulletObj: {fileID: 8576911467294866163, guid: 55589c62f1e46fb4383e190f09043c9c, type: 3}
+  bulletSpeed: 10
+  bulletCooldown: 1
 --- !u!50 &2055107677
 Rigidbody2D:
   serializedVersion: 4
