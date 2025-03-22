@@ -6,27 +6,29 @@ using UnityEngine;
 
 public class Cursor : MonoBehaviour
 {
-    //メンバー変数
     [SerializeField]
     [Header("Player")]
     private GameObject player;
 
     private Rigidbody2D rigidbody;
-
+    private BoxCollider2D collider;
     [SerializeField]
-    [Header("カーソル移動の速さ")]
+    
     private float moveSpeed = 5.0f;
 
     Vector3 direction = Vector3.zero;
 
  
     [SerializeField]
-    [Header("カーソルの移動範囲制限")]
     private GameObject Circle; 
     private float radius;
     bool isChoose;
     private GameObject square;
-    //カーソル制御＆制限
+    
+    private float selectCooldown = 0.2f; // 連続入力を防ぐ時間
+    private float lastSelectTime = -1f;
+
+
     private void CusorMove()
     {
         if (Input.GetKeyDown(KeyCode.LeftArrow))
@@ -63,49 +65,50 @@ public class Cursor : MonoBehaviour
         {
             direction.y = 0.0f;
         }
+        
+        rigidbody.velocity = direction * moveSpeed;
+        // プレイヤーからの距離
+        Vector3 offset = transform.position - player.transform.position;
 
-        if (Vector3.Distance(transform.position, player.transform.position) <= radius)
+        // 半径を超えたらClamp
+        if (offset.magnitude > radius) 
         {
-            rigidbody.velocity = direction * moveSpeed;
-        }
-        else
-        {
-            // direction: プレイヤー→現在位置 の方向（押し戻す方向）
-            Vector3 fromPlayerToCurrent = (transform.position - player.transform.position).normalized;
-
-            // プレイヤーから半径分だけの位置に制限
-            transform.position = player.transform.position + fromPlayerToCurrent * radius;
-
-            // velocity も止めておくと良い
-            rigidbody.velocity = Vector3.zero;
+            offset = offset.normalized * radius; 
         }
 
-
-
+        transform.position = player.transform.position + offset;
     }
 
     private void Select()
     {
-        if (Input.GetKeyDown(KeyCode.Return))
+        if (Time.time - lastSelectTime > selectCooldown)
         {
-
-            Vector2 center = transform.position;
-            float radius = 0.2f;
-            LayerMask mask = LayerMask.GetMask("Block"); 
-
-            Collider2D hit = Physics2D.OverlapCircle(center, radius, mask);
-
-            if (hit != null)
+            if (!isChoose && Input.GetKeyDown(KeyCode.Return))
             {
-                Debug.Log("敵が範囲内にいる: " + hit.name);
-                square = hit.gameObject;
-                isChoose = true;
+                Vector2 center = transform.position;
+                float radius = 0.2f;
+                LayerMask mask = LayerMask.GetMask("Block");
+
+                Collider2D hit = Physics2D.OverlapCircle(center, radius, mask);
+
+                if (hit != null)
+                {
+                    square = hit.gameObject;
+                    isChoose = true;
+                    collider.enabled = true;
+                    square.GetComponent<BoxCollider2D>().enabled = false;
+                    lastSelectTime = Time.time;
+                }
             }
-
-
-
+            else if (isChoose && Input.GetKeyDown(KeyCode.Return) && square != null)
+            {
+                isChoose = false;
+                square.GetComponent<BoxCollider2D>().enabled = true;
+                collider.enabled = false;
+                square = null;
+                lastSelectTime = Time.time;
+            }
         }
-
     }
 
     private void BlockMove()
@@ -119,9 +122,11 @@ public class Cursor : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {   
-        //円の半径を取得
+        //?~????a???擾
         radius = Circle.transform.localScale.x / 2;
         rigidbody = GetComponent<Rigidbody2D>();
+        collider = GetComponent<BoxCollider2D>();
+        collider.enabled = false;
     }
 
     // Update is called once per frame
