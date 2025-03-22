@@ -7,6 +7,8 @@ TagManager:
   - Ground
   - enemy
   - desu
+  - Li
+  - Au
   layers:
   - Default
   - TransparentFX

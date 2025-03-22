@@ -28,9 +28,20 @@ public class PlayerController : MonoBehaviour
 	[Header("地面に接しているかどうか")]
 	/*==============================*/
 
-	private bool Ground = false; // 地面に接しているかどうか.
-	private bool Jumping = false; // ジャンプ中かどうかを追跡するフラグ.
+	/*============電気弾==========*/
+	[Header("弾のオブジェクト")]
+	public GameObject AuBulletObj;//弾のオブジェクト.
+	Vector3 bulletPoint;  //弾の位置.
+	/*============================*/
+
+
+	private bool Ground = false;      // 地面に接しているかどうか.
+	private bool Jumping = false;     // ジャンプ中かどうかを追跡するフラグ.
 	private bool KnockedBack = false; // ノックバック中かどうかを管理.
+	private bool LiSkillJigi = false; // リチウムスキルが使えるのかのフラグ.
+	private bool hasExecuted = false; //　Executedが使えているかどうか.
+	private bool electricityjigi = false;//電気が使えているか.
+
 
 	void Start()
 	{
@@ -47,6 +58,8 @@ public class PlayerController : MonoBehaviour
 		// プレイヤーの移動とジャンプ.
 		Move();
 		Jump();
+		Excute();
+		
 	}
 
 	/// <summary>
@@ -93,11 +106,34 @@ public class PlayerController : MonoBehaviour
 	/// <summary>
 	/// ジャンプ力管理
 	/// </summary>
-	private void SetJump()
+	public void SetJumpPower()
+	{
+		jumpPower = 20;
+	}
+	/// <summary>
+	/// リチウムスキルリターン.
+	/// </summary>
+	public void ResetPower()
+	{
+		jumpPower = 10;
+	}
+
+	/// <summary>
+	/// 金のスキル.
+	/// </summary>
+	public void electricity()
 	{
 
 	}
-	
+	/// <summary>
+	/// 電気だまの管理.
+	/// </summary>
+	public void electricityball()
+	{
+		// 弾の生成
+		Instantiate(AuBulletObj);
+	}
+
 
 	private void Knockback(Vector2 knockbackDuration)
 	{
@@ -146,7 +182,19 @@ public class PlayerController : MonoBehaviour
 			Destroy(this.gameObject);
 		}
 
+		//リチウムスキル.
+		if (collision.gameObject.CompareTag("Li"))
+		{
+			LiSkillJigi = true;
+		}
+		//電気をまとう
+		if (collision.gameObject.CompareTag("Au"))
+		{
+			electricityjigi = true;
+		}
+
 	}
+	
 
 	/// <summary>
 	/// 死亡.
@@ -159,9 +207,37 @@ public class PlayerController : MonoBehaviour
 	/// <summary>
 	/// アイテム.
 	/// </summary>
-	public void Item()
+	public void Excute()
 	{
 
+
+		if (Input.GetKeyDown(KeyCode.Q) && LiSkillJigi == true)
+		{
+			if(!hasExecuted)
+		    {
+				SkillLi skillLi = GetComponent<SkillLi>();
+				skillLi.Excute();
+				hasExecuted = true;
+			}
+			else
+			{
+				ResetPower();
+				hasExecuted = false;
+			}
+
+			
+		}
+
+		if(Input.GetKeyDown(KeyCode.K) && electricityjigi == true)
+		{
+			KnockedBack = false;
+			knockbackDuration = 0f;
+
+		}
+		if (Input.GetKeyDown(KeyCode.R) && electricityjigi == true)
+		{
+			electricityball();
+		}
 	}
 
 }
