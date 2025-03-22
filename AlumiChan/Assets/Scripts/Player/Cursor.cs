@@ -28,6 +28,7 @@ public class Cursor : MonoBehaviour
     private float selectCooldown = 0.2f; // ˜A‘±“ü—Í‚ð–h‚®ŽžŠÔ
     private float lastSelectTime = -1f;
 
+    private float distance;
 
     private void CusorMove()
     {
@@ -96,19 +97,33 @@ public class Cursor : MonoBehaviour
                     square = hit.gameObject;
                     isChoose = true;
                     collider.enabled = true;
+
+                    square.GetComponent<SpriteRenderer>().color = Color.red;
+                  
+                    
                     square.GetComponent<BoxCollider2D>().enabled = false;
                     lastSelectTime = Time.time;
                 }
             }
-            else if (isChoose && Input.GetKeyDown(KeyCode.Return) && square != null)
+            else if (isChoose && Input.GetKeyDown(KeyCode.Return))
             {
-                isChoose = false;
-                square.GetComponent<BoxCollider2D>().enabled = true;
-                collider.enabled = false;
-                square = null;
-                lastSelectTime = Time.time;
+                UnSelect();
             }
         }
+    }
+
+    private void UnSelect()
+    {
+        if (square == null)
+            return;
+        isChoose = false;
+        square.GetComponent<BoxCollider2D>().enabled = true;
+        collider.enabled = false;
+
+        square.GetComponent<SpriteRenderer>().color = Color.white;
+
+        square = null;
+        lastSelectTime = Time.time;
     }
 
     private void BlockMove()
@@ -118,6 +133,15 @@ public class Cursor : MonoBehaviour
         }
 
     }
+
+    private void Check()
+    {
+        if(Vector3.Distance(player.transform.position, transform.position) <= 1.5f)
+        {
+            UnSelect() ;
+        }
+    }
+
 
     // Start is called before the first frame update
     void Start()
@@ -132,9 +156,10 @@ public class Cursor : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        transform.rotation = Quaternion.identity;
         CusorMove();
         Select();
         BlockMove();
+        Check();
     }
 }

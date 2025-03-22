@@ -4,15 +4,17 @@ using UnityEngine;
 
 public class Check : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    private void OnCollisionEnter2D(Collision2D collision)
     {
-        
-    }
+        if (collision != null)
+        {
+            foreach (Transform t in collision.transform) 
+            {
+                if (t.gameObject.CompareTag("block"))
+                {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+                }
+            }
+        }
     }
 }
