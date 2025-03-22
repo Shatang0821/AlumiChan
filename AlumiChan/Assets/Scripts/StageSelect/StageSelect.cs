@@ -1,41 +1,66 @@
-using System.Collections;
+ï»¿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.SceneManagement; // ƒV[ƒ“‘JˆÚ‚É•K—v
+using UnityEngine.SceneManagement; // ã‚·ãƒ¼ãƒ³é·ç§»ã«å¿…è¦
 
 public class StageSelect : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+	// éŸ³å£°ç”¨ã®AudioSourceã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆ
+	private AudioSource audioSource;
+
+	// ã‚¯ãƒªãƒƒã‚¯æ™‚ã®åŠ¹æœéŸ³
+	[SerializeField] private AudioClip clickSound;
+	// Start is called before the first frame update
+	void Start()
     {
-        
-    }
+		// AudioSourceã‚³ãƒ³ãƒãƒ¼ãƒãƒ³ãƒˆã‚’å–å¾—
+		audioSource = GetComponent<AudioSource>();
+
+		// AudioSourceãŒã‚¢ã‚¿ãƒƒãƒã•ã‚Œã¦ã„ãªã„å ´åˆã¯è¿½åŠ 
+		if (audioSource == null)
+		{
+			audioSource = gameObject.AddComponent<AudioSource>();
+		}
+	}
 
     // Update is called once per frame
     void Update()
     {
         
     }
-	// ƒQ[ƒ€ŠJnƒ{ƒ^ƒ“‚ª‰Ÿ‚³‚ê‚½‚Æ‚«‚ÉŒÄ‚Î‚ê‚éƒƒ\ƒbƒh
+	// åŠ¹æœéŸ³ã‚’å†ç”Ÿã—ã¦ã‹ã‚‰ã‚·ãƒ¼ãƒ³ã‚’èª­ã¿è¾¼ã‚€é–¢æ•°
+	private IEnumerator PlaySoundAndLoadScene(string sceneName)
+	{
+		// åŠ¹æœéŸ³ã‚’å†ç”Ÿ
+		audioSource.PlayOneShot(clickSound);
+
+		// åŠ¹æœéŸ³ã®å†ç”ŸãŒçµ‚ã‚ã‚‹ã¾ã§å°‘ã—å¾…ã¤ï¼ˆçŸ­ã„åŠ¹æœéŸ³ãªã‚‰0.1ã€œ0.3ç§’ç¨‹åº¦ï¼‰
+		yield return new WaitForSeconds(0.2f);
+
+		// ã‚·ãƒ¼ãƒ³ã‚’èª­ã¿è¾¼ã‚€
+		SceneManager.LoadScene(sceneName);
+	}
+
+
 	public void stage1()
 	{
-		// "GameScene"‚Æ‚¢‚¤ƒV[ƒ“‚É‘JˆÚ‚·‚é
-		SceneManager.LoadScene("stage");
+
+		StartCoroutine(PlaySoundAndLoadScene("stage1"));
 	}
 	public void stage2()
 	{
-		// "GameScene"‚Æ‚¢‚¤ƒV[ƒ“‚É‘JˆÚ‚·‚é
-		SceneManager.LoadScene("stage2");
+
+		StartCoroutine(PlaySoundAndLoadScene("stage2"));
 	}
 	public void stage3()
 	{
-		// "GameScene"‚Æ‚¢‚¤ƒV[ƒ“‚É‘JˆÚ‚·‚é
-		SceneManager.LoadScene("stage3");
+
+		StartCoroutine(PlaySoundAndLoadScene("stage3"));
 	}
 	public void stage4()
 	{
-		// "GameScene"‚Æ‚¢‚¤ƒV[ƒ“‚É‘JˆÚ‚·‚é
-		SceneManager.LoadScene("stage4");
+
+		StartCoroutine(PlaySoundAndLoadScene("stage4"));
 	}
 
 }
