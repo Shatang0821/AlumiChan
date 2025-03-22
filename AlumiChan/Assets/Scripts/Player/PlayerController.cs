@@ -15,10 +15,10 @@ public class PlayerController : MonoBehaviour
 	private float jumpPower = 10.0f;
 	[SerializeField]
 	[Header("ノックバック力")]
-	private float knockbackForce = 10.0f; // Knockbackの強さ
+	private Vector2 knockbackForce = new Vector2(10.0f,0); // Knockbackの強さ
 	[SerializeField]
 	[Header("ノックバックのの持続時間")]
-	private float knockbackDuration = 0.2f;// Knockbackの持続時間「
+	private float knockbackDuration = 0.2f;// Knockbackの持続時間
 	/*==============================*/
 
 	/*============地面変数管理==========*/
@@ -52,32 +52,34 @@ public class PlayerController : MonoBehaviour
 	/// <summary>
 	/// プレイヤー移動.
 	/// </summary>
-	public void Move()
+	private void Move()
 	{
 		// キー入力を直接チェック.
 		float x = 0;
-		if (Input.GetKey(KeyCode.A))
-		{
-			x = -1;
-		}
-		else if (Input.GetKey(KeyCode.D))
-		{
-			x = 1;
-		}
+	if (!KnockedBack) { 
+			if (Input.GetKey(KeyCode.A))
+			{
+				x = -1;
+			}
+			else if (Input.GetKey(KeyCode.D))
+			{
+				x = 1;
+			}
 
-		if (x != 0)
-		{
+		  if (x != 0)
+		  {
 			// 移動方向に応じてキャラクターの向きを変更.
 			transform.localScale = new Vector3(x * 1, 1, 1);
 			// 移動処理 - moveSpeedを使用.
 			transform.position += new Vector3(x * moveSpeed * Time.deltaTime, 0, 0);
-		}
+		   }
+	    }
 	}
 
 	/// <summary>
 	/// ジャンプ.
 	/// </summary>
-	public void Jump()
+	private void Jump()
 	{
 		// ジャンプ操作: 地面に接している場合のみ.
 		if (Input.GetKeyDown(KeyCode.Space) && !Jumping)
@@ -87,22 +89,39 @@ public class PlayerController : MonoBehaviour
 			Jumping = true;
 		}
 	}
+	
+	/// <summary>
+	/// ジャンプ力管理
+	/// </summary>
+	private void SetJump()
+	{
+
+	}
+	
 
 	private void Knockback(Vector2 knockbackDuration)
 	{
+		rigidbody2D.velocity = new Vector2(0,rigidbody2D.velocity.y);
 		//ノックバックの中を設定.
 		KnockedBack = true;
-
-		//ノックバックの力を加える.
-		rigidbody2D.AddForce(knockbackDuration * knockbackForce, ForceMode2D.Impulse);
+		if (Jumping)
+		{
+			//ノックバックの力を加える.
+			rigidbody2D.AddForce(knockbackDuration * knockbackForce, ForceMode2D.Impulse);
+		}
+		else
+		{
+			rigidbody2D.AddForce(knockbackDuration * knockbackForce, ForceMode2D.Impulse);
+		}
 
 		//ノックバックの持続時間後にフラグを戻す.
-	
+		StartCoroutine(ResetKnockback());
 	}
 	private IEnumerator ResetKnockback()
 	{
 		yield return new WaitForSeconds(knockbackDuration);
 		KnockedBack = false;
+		rigidbody2D.velocity = new Vector2(0, rigidbody2D.velocity.y);
 	}
 
 
@@ -114,15 +133,35 @@ public class PlayerController : MonoBehaviour
 			// 地面と接触したらジャンプ可能に戻す.
 			Jumping = false;
 		}
-
+		//エネミーに当たったらノックバックする.
 		if (collision.gameObject.CompareTag("enemy"))
 		{
 			Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
 			Knockback(knockbackDirection);
 		}
 
+		//死亡.
+		if(collision.gameObject.CompareTag("desu"))
+		{
+			Destroy(this.gameObject);
+		}
+
 	}
 
+	/// <summary>
+	/// 死亡.
+	/// </summary>
+	private void Death()
+	{
 
+	}
+
+	/// <summary>
+	/// アイテム.
+	/// </summary>
+	public void Item()
+	{
+
+	}
 
 }
