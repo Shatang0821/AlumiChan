@@ -23,10 +23,16 @@ public class PlayerController : MonoBehaviour
 	/*==============================*/
 
 	/*============地面変数管理==========*/
-	[Header("地面のタグ名")]
-	private string groundTag = "Ground"; // 地面のタグ名.
-	[SerializeField]
-	[Header("地面に接しているかどうか")]
+	// ↓地面チェック
+	[SerializeField] protected LayerMask whatIsGround; 
+	[SerializeField] protected Transform groundCheck;         //地面チェック
+	[SerializeField] protected float groundCheckDistance;     //チェック距離//レイヤー設定
+	public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
+	
+	//[Header("地面のタグ名")]
+	//private string groundTag = "Ground"; // 地面のタグ名.
+	//[SerializeField]
+	//[Header("地面に接しているかどうか")]
 	/*==============================*/
 
 	/*============電気弾==========*/
@@ -43,14 +49,23 @@ public class PlayerController : MonoBehaviour
 	private float bulletDirection = 1f; // 弾の発射方向 (1: 右, -1: 左).
 	/*============================*/
 
-
+	[SerializeField]
+	private Animator _animator;
+	[SerializeField]
+	private Animator _nextAnimator;
 	private bool Ground = false;      // 地面に接しているかどうか.
 	private bool Jumping = false;     // ジャンプ中かどうかを追跡するフラグ.
 	private bool KnockedBack = false; // ノックバック中かどうかを管理.
-	private bool LiSkillJigi = false; // リチウムスキルが使えるのかのフラグ.
-	private bool hasExecuted = false; //　Executedが使えているかどうか.
-	private bool electricityjigi = false;//電気が使えているか.
+	
+	// スキル関連
+	//private bool LiSkillJigi = false; // リチウムスキルが使えるのかのフラグ.
+	//private bool hasExecuted = false; //　Executedが使えているかどうか.
+	//private bool electricityjigi = false;//電気が使えているか.
+	//private bool feSkillJigi = false; // 磁力使えるか
 
+	private SkillBase currentSkill;
+	[SerializeField]
+	private GameObject FeContainer;
 
 	void Start()
 	{
@@ -68,8 +83,7 @@ public class PlayerController : MonoBehaviour
 		// プレイヤーの移動とジャンプ.
 		Move();
 		Jump();
-		Excute();
-
+		ExecuteSkill();
 	}
 
 	/// <summary>
@@ -81,12 +95,12 @@ public class PlayerController : MonoBehaviour
 		float x = 0;
 		if (!KnockedBack)
 		{
-			if (Input.GetKey(KeyCode.A))
+			if (Input.GetKey(KeyCode.LeftArrow))
 			{
 				x = -1;
 				bulletDirection = -1f; // 左向きに設定
 			}
-			else if (Input.GetKey(KeyCode.D))
+			else if (Input.GetKey(KeyCode.RightArrow))
 			{
 				x = 1;
 				bulletDirection = 1f; // 右向きに設定
@@ -94,11 +108,25 @@ public class PlayerController : MonoBehaviour
 
 			if (x != 0)
 			{
+				_animator.SetBool("Move",true);
+				_nextAnimator.SetBool("Move",true);
 				// 移動方向に応じてキャラクターの向きを変更.
 				transform.localScale = new Vector3(x * 1, 1, 1);
 				// 移動処理 - moveSpeedを使用.
 				transform.position += new Vector3(x * moveSpeed * Time.deltaTime, 0, 0);
 			}
+			else
+			{
+				_animator.SetBool("Move",false);
+				_nextAnimator.SetBool("Move",false);
+			}
+		}
+
+		if (Jumping && rigidbody2D.velocity.y == 0)
+		{
+			Jumping = false;
+			_animator.SetBool("Jump",false);
+			_nextAnimator.SetBool("Jump",false);
 		}
 	}
 
@@ -113,6 +141,23 @@ public class PlayerController : MonoBehaviour
 			// ジャンプ力を加える.
 			rigidbody2D.AddForce(new Vector2(0, jumpPower), ForceMode2D.Impulse);
 			Jumping = true;
+			_animator.SetBool("Jump",true);
+			_nextAnimator.SetBool("Jump",false);
+		}
+
+		if (Jumping)
+		{
+			if (rigidbody2D.velocity.y >= 0)
+			{
+				_animator.SetFloat("VelocityY",1);
+				_nextAnimator.SetFloat("VelocityY",1);
+			}
+			else
+			{
+				_animator.SetFloat("VelocityY",-1);
+				_nextAnimator.SetFloat("VelocityY",-1);
+			}
+			
 		}
 	}
 
@@ -139,11 +184,18 @@ public class PlayerController : MonoBehaviour
 		// 電気をまとうスキルの実装があれば追加
 	}
 
+
+	public void InitElec()
+	{
+		KnockedBack = false;
+		knockbackDuration = 0f;
+	}
 	/// <summary>
 	/// 電気だまの管理.
 	/// </summary>
 	public void electricityball()
 	{
+		
 		// クールタイム中なら撃てない
 		if (!canShoot)
 			return;
@@ -172,6 +224,13 @@ public class PlayerController : MonoBehaviour
 		// クールタイムを開始
 		StartCoroutine(BulletCooldown());
 	}
+
+	public void RestElec()
+	{
+		knockbackDuration = 0.2f;
+	}
+	
+	
 	/// <summary>
 	/// 弾のクールタイム処理
 	/// </summary>
@@ -180,6 +239,16 @@ public class PlayerController : MonoBehaviour
 		canShoot = false;
 		yield return new WaitForSeconds(bulletCooldown);
 		canShoot = true;
+	}
+
+	public void InitFe()
+	{
+		FeContainer.SetActive(true);
+	}
+
+	public void ResetFe()
+	{
+		FeContainer.SetActive(false);
 	}
 
 	private void Knockback(Vector2 knockbackDuration)
@@ -211,10 +280,11 @@ public class PlayerController : MonoBehaviour
 
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		if (collision.gameObject.CompareTag(groundTag))
+		if (IsGroundDetected())
 		{
 			// 地面と接触したらジャンプ可能に戻す.
 			Jumping = false;
+			_animator.SetBool("Jump",false);
 		}
 		//エネミーに当たったらノックバックする.
 		if (collision.gameObject.CompareTag("enemy"))
@@ -232,16 +302,46 @@ public class PlayerController : MonoBehaviour
 		//リチウムスキル.
 		if (collision.gameObject.CompareTag("Li"))
 		{
-			LiSkillJigi = true;
+			//LiSkillJigi = true;
+			//currentSkill = new SkillLi();
 		}
 		//電気をまとう
 		if (collision.gameObject.CompareTag("Au"))
 		{
-			electricityjigi = true;
+			//electricityjigi = true;
+			//currentSkill = new SkillAu();
+		}
+
+		if (collision.gameObject.CompareTag("Fe"))
+		{
+			//feSkillJigi = true;
+			//currentSkill = new SkillFe();
 		}
 
 	}
 
+	public void SetCurrentSkill(SkillBase skillBase)
+	{
+		if (currentSkill != null)
+		{
+			currentSkill.ResetSkill(this);
+		}
+
+		currentSkill = skillBase;
+	}
+
+	private void ExecuteSkill()
+	{
+		if(Input.GetKeyDown(KeyCode.Z))
+		{
+			currentSkill.Execute(this);
+		}
+	}
+
+	private void ResetSkill()
+	{
+		
+	}
 
 	/// <summary>
 	/// 死亡.
@@ -250,36 +350,9 @@ public class PlayerController : MonoBehaviour
 	{
 		// 死亡処理の実装があれば追加
 	}
-
-	/// <summary>
-	/// アイテム.
-	/// </summary>
-	public void Excute()
+	
+	protected void OnDrawGizmos()
 	{
-		if (Input.GetKeyDown(KeyCode.Q) && LiSkillJigi == true)
-		{
-			if (!hasExecuted)
-			{
-				SkillLi skillLi = GetComponent<SkillLi>();
-				skillLi.Excute();
-				hasExecuted = true;
-			}
-			else
-			{
-				ResetPower();
-				hasExecuted = false;
-			}
-		}
-
-		if (Input.GetKeyDown(KeyCode.K) && electricityjigi == true)
-		{
-			KnockedBack = false;
-			knockbackDuration = 0f;
-		}
-
-		if (Input.GetKeyDown(KeyCode.R) && electricityjigi == true)
-		{
-			electricityball();
-		}
+		Gizmos.DrawLine(groundCheck.position, new Vector3(groundCheck.position.x, groundCheck.position.y - groundCheckDistance));
 	}
 }

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography.X509Certificates;
@@ -32,37 +33,37 @@ public class Cursor : MonoBehaviour
 
     private void CusorMove()
     {
-        if (Input.GetKeyDown(KeyCode.LeftArrow))
+        if (Input.GetKeyDown(KeyCode.A))
         {
             direction.x = -1.0f;
         }
-        else if (Input.GetKeyUp(KeyCode.LeftArrow))
+        else if (Input.GetKeyUp(KeyCode.A))
         {
             direction.x = 0.0f;
         }
-        if (Input.GetKey(KeyCode.RightArrow))
+        if (Input.GetKey(KeyCode.D))
         {
             direction.x = 1.0f;
         }
-        else if (Input.GetKeyUp(KeyCode.RightArrow))
+        else if (Input.GetKeyUp(KeyCode.D))
         {
             direction.x = 0.0f;
         }
 
-        if (Input.GetKey(KeyCode.UpArrow))
+        if (Input.GetKey(KeyCode.W))
         {
             direction.y = 1.0f;
         }
-        else if (Input.GetKeyUp(KeyCode.UpArrow))
+        else if (Input.GetKeyUp(KeyCode.W))
         {
             direction.y = 0.0f;
         }
 
-        if (Input.GetKey(KeyCode.DownArrow))
+        if (Input.GetKey(KeyCode.S))
         {
             direction.y = -1.0f;
         }
-        else if (Input.GetKeyUp(KeyCode.DownArrow))
+        else if (Input.GetKeyUp(KeyCode.S))
         {
             direction.y = 0.0f;
         }
@@ -80,11 +81,25 @@ public class Cursor : MonoBehaviour
         transform.position = player.transform.position + offset;
     }
 
+    private void LateUpdate()
+    {
+        // ƒvƒŒƒCƒ„[‚©‚ç‚Ì‹——£
+        Vector3 offset = transform.position - player.transform.position;
+
+        // ”¼Œa‚ð’´‚¦‚½‚çClamp
+        if (offset.magnitude > radius) 
+        {
+            offset = offset.normalized * radius; 
+        }
+
+        transform.position = player.transform.position + offset;
+    }
+
     private void Select()
     {
         if (Time.time - lastSelectTime > selectCooldown)
         {
-            if (!isChoose && Input.GetKeyDown(KeyCode.Return))
+            if (!isChoose && Input.GetKeyDown(KeyCode.Z))
             {
                 Vector2 center = transform.position;
                 float radius = 0.2f;
@@ -105,7 +120,7 @@ public class Cursor : MonoBehaviour
                     lastSelectTime = Time.time;
                 }
             }
-            else if (isChoose && Input.GetKeyDown(KeyCode.Return))
+            else if (isChoose && Input.GetKeyDown(KeyCode.Z))
             {
                 UnSelect();
             }
@@ -119,7 +134,7 @@ public class Cursor : MonoBehaviour
         isChoose = false;
         square.GetComponent<BoxCollider2D>().enabled = true;
         collider.enabled = false;
-
+        square.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
         square.GetComponent<SpriteRenderer>().color = Color.white;
 
         square = null;

@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fad48382af0e31c41a98df4e94857f2c, type: 3}
+  m_Name: Skill_Li
+  m_EditorClassIdentifier: 
+  appearance: {fileID: 21300000, guid: 020d06925a8c7d54f86e289f6273a46f, type: 3}
+  overrideController: {fileID: 22100000, guid: efe7b46319c61784587612b5db3a5d49, type: 2}
