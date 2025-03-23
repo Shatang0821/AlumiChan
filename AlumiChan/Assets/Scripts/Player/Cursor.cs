@@ -95,6 +95,11 @@ public class Cursor : MonoBehaviour
         transform.position = player.transform.position + offset;
     }
 
+    private void OnDisable()
+    {
+        UnSelect();
+    }
+
     private void Select()
     {
         if (Time.time - lastSelectTime > selectCooldown)

@@ -5,13 +5,15 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
-  - enemy
   - desu
   - Li
   - Au
   - Wall
   - Fe
   - Kumonosu
+  - Enemy
+  - Enviroment
+  - block
   layers:
   - Default
   - TransparentFX

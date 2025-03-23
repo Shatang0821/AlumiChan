@@ -13,7 +13,7 @@ public class BulletController : MonoBehaviour
 	private float lifetime = 3f;        // 弾の生存時間
 	[SerializeField]
 	[Header("エネミーのタグ")]
-	private string enemyTag = "enemy";  // 敵のタグ
+	private string enemyTag = "Enemy";  // 敵のタグ
 
 	void Start()
 	{
@@ -50,6 +50,7 @@ public class BulletController : MonoBehaviour
 	// 衝突判定
 	private void OnTriggerEnter2D(Collider2D collision)
 	{
+		Debug.Log("Collided");
 		// 敵に当たった場合
 		if (collision.CompareTag(enemyTag))
 		{
@@ -58,12 +59,13 @@ public class BulletController : MonoBehaviour
 			Destroy(gameObject);
 		}
 		// 地面や壁に当たった場合
-		else if (collision.CompareTag("Environment"))
+		else if (collision.CompareTag("Enviroment"))
 		{
 			// 弾を破壊
 			Destroy(gameObject);
 		}
-		else if (collision.CompareTag("Kumonosu"))
+		
+		if (collision.CompareTag("Kumonosu"))
 		{
 			Destroy(collision.gameObject);
 			Destroy(gameObject);

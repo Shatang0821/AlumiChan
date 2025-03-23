@@ -6,16 +6,38 @@ using UnityEngine;
 public class Check : MonoBehaviour
 {
     public GameObject player;
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision != null)
-        {
-            foreach (Transform t in collision.transform) 
-            {
-                if (t.gameObject.CompareTag("block"))
-                {
 
+    private HashSet<GameObject> blocksInRange = new HashSet<GameObject>();
+    private Dictionary<GameObject, Color> originalColors = new Dictionary<GameObject, Color>();
+    
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("block"))
+        {
+            SpriteRenderer sr = other.GetComponent<SpriteRenderer>();
+            if (sr != null && !originalColors.ContainsKey(other.gameObject))
+            {
+                originalColors[other.gameObject] = sr.color;
+                sr.color = Color.yellow;
+                blocksInRange.Add(other.gameObject);
+            }
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.CompareTag("block"))
+        {
+            if (originalColors.TryGetValue(other.gameObject, out Color originalColor))
+            {
+                SpriteRenderer sr = other.GetComponent<SpriteRenderer>();
+                if (sr != null)
+                {
+                    sr.color = originalColor;
                 }
+
+                originalColors.Remove(other.gameObject);
+                blocksInRange.Remove(other.gameObject);
             }
         }
     }

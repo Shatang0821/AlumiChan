@@ -312,7 +312,7 @@ public class PlayerController : MonoBehaviour
 			_animator.SetBool("Jump",false);
 		}
 		//エネミーに当たったらノックバックする.
-		if (collision.gameObject.CompareTag("enemy"))
+		if (collision.gameObject.CompareTag("Enemy"))
 		{
 			Vector2 knockbackDirection = (transform.position - collision.transform.position).normalized;
 			Knockback(knockbackDirection);

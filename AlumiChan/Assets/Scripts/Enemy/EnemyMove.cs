@@ -35,14 +35,14 @@ public class EnemyMove : MonoBehaviour
             transform.rotation = Quaternion.Euler(new Vector3(0, y, 0));
         }        
         transform.position += new Vector3(transform.forward.z * speed * Time.deltaTime, 0, 0);//移動処理
-        Debug.Log(facingDir);
+//        Debug.Log(facingDir);
 
     }
     public void TakeDamage()
     {
         //アニメーションが流れきったらまた動き出す
         Animator animator = GetComponent<Animator>();
-        animator.SetTrigger("sleep");
+        animator.SetBool("sleep",true);
         speed = 0.0f;
     }
     
