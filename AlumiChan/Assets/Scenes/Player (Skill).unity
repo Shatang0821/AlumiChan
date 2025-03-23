@@ -838,7 +838,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &339807317
 Transform:
   m_ObjectHideFlags: 0
@@ -2553,7 +2553,10 @@ MonoBehaviour:
     volueme: 1
   jumpAudioData:
     audioClip: {fileID: 8300000, guid: dee8829e2f68a954a91ea5e48bdb02ce, type: 3}
-    volueme: 0
+    volueme: 1
+  ingroundAudioData:
+    audioClip: {fileID: 8300000, guid: d550b7070dd2a8542a49acb79aee3f71, type: 3}
+    volueme: 1
 --- !u!50 &2055107677
 Rigidbody2D:
   serializedVersion: 4

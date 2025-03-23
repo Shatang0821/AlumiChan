@@ -68,8 +68,6 @@ public class PlayerController : MonoBehaviour
 	private AudioData moveAudioData;
 	[SerializeField]
 	private AudioData jumpAudioData;
-	[SerializeField]
-	private AudioData ingroundAudioData;
 	void Start()
 	{
 		// Rigidbody2Dコンポーネントを取得.
@@ -182,7 +180,7 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public void ResetPower()
 	{
-		jumpPower = 10;
+		jumpPower = 12;
 	}
 
 	/// <summary>
@@ -293,7 +291,6 @@ public class PlayerController : MonoBehaviour
 		{
 			// 地面と接触したらジャンプ可能に戻す.
 			Jumping = false;
-			AudioManager.Instance.PlaySFX(ingroundAudioData);
 			_animator.SetBool("Jump",false);
 		}
 		//エネミーに当たったらノックバックする.
