@@ -6,9 +6,11 @@ public class AuSkillItem : MonoBehaviour
 {
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
-		//íœ.
+		//
 		if (collision.gameObject.CompareTag("Player"))
 		{
+			//ƒAƒCƒeƒ€æ‚Á‚½ˆ—
+			collision.gameObject.GetComponent<PlayerController>();
 			Destroy(this.gameObject);
 		}
 	}

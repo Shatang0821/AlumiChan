@@ -29,6 +29,8 @@ public class SkillUIController : MonoBehaviour
     private void Start()
     {
         appearanceChanger = player.GetComponent<PlayerAppearanceChanger>();
+        
+        skillLeftBubble.gameObject.SetActive(false);
     }
 
     void Update()
@@ -100,7 +102,7 @@ public class SkillUIController : MonoBehaviour
         skillLeft.localScale = Vector3.zero;
         skillRight.localScale = Vector3.zero;
         skillUp.localScale = Vector3.zero;
-
+        
         skillLeft.gameObject.SetActive(true);
         skillRight.gameObject.SetActive(true);
         skillUp.gameObject.SetActive(true);
