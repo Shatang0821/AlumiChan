@@ -63,5 +63,10 @@ public class BulletController : MonoBehaviour
 			// ’e‚ð”j‰ó
 			Destroy(gameObject);
 		}
+		else if (collision.CompareTag("Kumonosu"))
+		{
+			Destroy(collision.gameObject);
+			Destroy(gameObject);
+		}
 	}
 }
