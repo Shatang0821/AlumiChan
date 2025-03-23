@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3425725273746870048}
   - component: {fileID: 8653871726438785741}
   - component: {fileID: 5883992541521513104}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LiSkill
   m_TagString: Li
   m_Icon: {fileID: 0}

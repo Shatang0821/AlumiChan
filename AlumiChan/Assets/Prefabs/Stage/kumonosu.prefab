@@ -11,9 +11,9 @@ GameObject:
   - component: {fileID: 977187150740665376}
   - component: {fileID: 6099326260745954696}
   - component: {fileID: 6076016140558352098}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: kumonosu
-  m_TagString: Untagged
+  m_TagString: Kumonosu
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

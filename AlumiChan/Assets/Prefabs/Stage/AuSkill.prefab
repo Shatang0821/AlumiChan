@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 1927895135068533687}
   - component: {fileID: 3524678642980509396}
   - component: {fileID: 1008961893314853891}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AuSkill
   m_TagString: Au
   m_Icon: {fileID: 0}

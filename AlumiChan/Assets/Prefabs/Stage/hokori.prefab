@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3805640745420896511}
   - component: {fileID: 7912451001855543718}
   - component: {fileID: 1368539779908047437}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: hokori
   m_TagString: Untagged
   m_Icon: {fileID: 0}

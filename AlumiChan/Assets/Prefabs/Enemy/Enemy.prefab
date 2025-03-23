@@ -172,11 +172,11 @@ MonoBehaviour:
   wallCheckDistance: 1.24
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   speed: 1
   checklayer:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   length: 1.2
 --- !u!50 &3826877400962659090
 Rigidbody2D:
