@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
 	
 	[SerializeField]
 	private AudioData moveAudioData;
+	private bool isWalkingSoundPlaying = false;
+	
 	[SerializeField]
 	private AudioData jumpAudioData;
 	void Start()
@@ -110,6 +112,16 @@ public class PlayerController : MonoBehaviour
 
 			if (x != 0)
 			{
+				if (!isWalkingSoundPlaying && IsGroundDetected())
+				{
+					AudioManager.Instance.PlayLoopSFX(moveAudioData);
+					isWalkingSoundPlaying = true;
+				}
+				else if(!IsGroundDetected())
+				{
+					AudioManager.Instance.StopLoopSFX();
+					isWalkingSoundPlaying = false;
+				}
 				_animator.SetBool("Move",true);
 				_nextAnimator.SetBool("Move",true);
 				// 移動方向に応じてキャラクターの向きを変更.
@@ -119,6 +131,11 @@ public class PlayerController : MonoBehaviour
 			}
 			else
 			{
+				if (isWalkingSoundPlaying || !IsGroundDetected())
+				{
+					AudioManager.Instance.StopLoopSFX();
+					isWalkingSoundPlaying = false;
+				}
 				_animator.SetBool("Move",false);
 				_nextAnimator.SetBool("Move",false);
 			}
@@ -346,6 +363,11 @@ public class PlayerController : MonoBehaviour
 			if (currentSkill != null)
 			{
 				currentSkill.Execute(this);
+				if (skillUIController.inFe || skillUIController.inAu)
+				{
+					_animator.SetTrigger("Execute");
+				}
+				
 			}
 		}
 	}

@@ -38,9 +38,9 @@ public class SkillUIController : MonoBehaviour
     private bool haveLi;
 
     //スキル発動している
-    private bool inAu;
-    private bool inFe;
-    private bool inLi;
+    public bool inAu;
+    public bool inFe;
+    public bool inLi;
 
     private bool inAuChanging;
     private bool inFeChanging;

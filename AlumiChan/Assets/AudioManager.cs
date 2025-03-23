@@ -6,7 +6,7 @@ using UnityEngine;
 public class AudioManager : UnityPersistentSingleton<AudioManager>
 {
     [SerializeField] AudioSource sFXPlayer;
-
+    [SerializeField] AudioSource loopSFXPlayer; // ループ再生用
     [SerializeField] float minPitch = 0.9f;
 
     [SerializeField] float maxPitch = 1.1f;
@@ -37,6 +37,31 @@ public class AudioManager : UnityPersistentSingleton<AudioManager>
     public void PlayRandomSFX(AudioData[] audioData)
     {
         PlayRandomSFX(audioData[Random.Range(0, audioData.Length)]);
+    }
+    
+    /// <summary>
+    /// 足音などのループSEを再生する
+    /// </summary>
+    public void PlayLoopSFX(AudioData audioData)
+    {
+        if (loopSFXPlayer.isPlaying) return;
+
+        loopSFXPlayer.clip = audioData.audioClip;
+        loopSFXPlayer.volume = audioData.volueme;
+        loopSFXPlayer.loop = true;
+        loopSFXPlayer.Play();
+    }
+
+    /// <summary>
+    /// ループSEを止める
+    /// </summary>
+    public void StopLoopSFX()
+    {
+        if (loopSFXPlayer.isPlaying)
+        {
+            loopSFXPlayer.Stop();
+            loopSFXPlayer.clip = null;
+        }
     }
 }
 
