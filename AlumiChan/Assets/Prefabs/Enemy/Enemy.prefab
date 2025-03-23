@@ -172,11 +172,11 @@ MonoBehaviour:
   wallCheckDistance: 1.24
   whatIsGround:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 64
   speed: 1
   checklayer:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 64
   length: 1.2
 --- !u!50 &3826877400962659090
 Rigidbody2D:
@@ -204,7 +204,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!61 &5466522902518443443
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -237,7 +237,7 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.04959756, y: -0.11723049}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -248,7 +248,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 1.4599043, y: 0.76553905}
   m_EdgeRadius: 0
 --- !u!95 &-5328071150666777472
 Animator:
