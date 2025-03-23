@@ -6140,7 +6140,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 5
-  jumpPower: 10
+  jumpPower: 12
   knockbackForce: {x: 10, y: 0}
   knockbackDuration: 0.2
   whatIsGround:
