@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour
 {
@@ -303,7 +304,7 @@ public class PlayerController : MonoBehaviour
 		//死亡.
 		if (collision.gameObject.CompareTag("desu"))
 		{
-			Destroy(this.gameObject);
+			Death();
 		}
 
 		//リチウムスキル.
@@ -361,6 +362,7 @@ public class PlayerController : MonoBehaviour
 	private void Death()
 	{
 		// 死亡処理の実装があれば追加
+		SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 	}
 	
 	protected void OnDrawGizmos()

@@ -38,15 +38,12 @@ public class EnemyMove : MonoBehaviour
         Debug.Log(facingDir);
 
     }
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void TakeDamage()
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            //アニメーションが流れきったらまた動き出す
-            Animator animator = GetComponent<Animator>();
-            animator.SetTrigger("sleep");
-            speed = 0.0f;
-        }
+        //アニメーションが流れきったらまた動き出す
+        Animator animator = GetComponent<Animator>();
+        animator.SetTrigger("sleep");
+        speed = 0.0f;
     }
     
     // ↓地面チェック

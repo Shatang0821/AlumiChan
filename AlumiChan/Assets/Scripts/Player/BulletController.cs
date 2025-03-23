@@ -54,10 +54,11 @@ public class BulletController : MonoBehaviour
 		if (collision.CompareTag(enemyTag))
 		{
 			// ’e‚ğ”j‰ó
+			collision.gameObject.GetComponent<EnemyMove>().TakeDamage();
 			Destroy(gameObject);
 		}
 		// ’n–Ê‚â•Ç‚É“–‚½‚Á‚½ê‡
-		else if (collision.CompareTag("Ground") || collision.CompareTag("Wall"))
+		else if (collision.CompareTag("Environment"))
 		{
 			// ’e‚ğ”j‰ó
 			Destroy(gameObject);

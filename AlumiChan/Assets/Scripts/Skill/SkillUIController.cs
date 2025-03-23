@@ -50,6 +50,8 @@ public class SkillUIController : MonoBehaviour
     public SpriteRenderer feSprite;
     public SpriteRenderer liSprite;
     
+    private bool isFlashing = false;
+    
     private void Start()
     {
         appearanceChanger = player.GetComponent<PlayerAppearanceChanger>();
@@ -131,14 +133,21 @@ public class SkillUIController : MonoBehaviour
     
     public void FlashRed(SpriteRenderer sprite)
     {
+        if (isFlashing) return; // フラグが立ってたら何もしない
+        isFlashing = true;
+
         Color originalColor = sprite.color;
 
         Sequence flashSeq = DOTween.Sequence();
         flashSeq.Append(sprite.DOColor(Color.red, 0.1f));
         flashSeq.Append(sprite.DOColor(originalColor, 0.1f));
-        flashSeq.SetLoops(2); // 2回点滅
+        flashSeq.SetLoops(2, LoopType.Yoyo);
+        flashSeq.OnComplete(() =>
+        {
+            isFlashing = false;
+        });
     }
-    
+
     void LateUpdate()
     {
         // プレイヤーの位置に追従（高さ調整したいならY軸を+0.5fとか）

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using DG.Tweening;
 
@@ -18,11 +19,17 @@ public class PlayerAppearanceChanger : MonoBehaviour
         ResetCutoff(); // 念のため初期化
     }
 
+    private void Start()
+    {
+        spriteNext.enabled = false;
+    }
+
     public void ChangeAppearance(SkillData newSkill)
     {
         // 1. Nextに新しいSprite設定して表示ON
         spriteNext.sprite = newSkill.appearance;
-        spriteNext.gameObject.SetActive(true);
+        spriteNext.enabled = true;
+        nextAnimator.enabled = true;
         nextAnimator.runtimeAnimatorController = newSkill.overrideController;
         // 2. Currentを上から消していく（_CutoffY: 1 → 0）
         currentMat.SetFloat("_CutoffY", 1f);
@@ -37,8 +44,7 @@ public class PlayerAppearanceChanger : MonoBehaviour
 
                 // 4. Reset（CutoffY & Next非表示）
                 ResetCutoff();
-                spriteNext.gameObject.SetActive(false);
-                
+                spriteNext.enabled = false;
                 currentAnimator.runtimeAnimatorController = newSkill.overrideController;
                 
                 Debug.Log("変身完了！");
