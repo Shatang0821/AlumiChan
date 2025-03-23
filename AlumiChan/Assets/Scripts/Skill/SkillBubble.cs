@@ -4,7 +4,7 @@ using DG.Tweening;
 public class SkillBubble : MonoBehaviour
 {
     public SpriteRenderer contentRenderer;    // 中の金属など
-
+    
     public float animTime = 0.5f;
 
     public void PlaySelectAnimation(System.Action onComplete)
@@ -16,6 +16,8 @@ public class SkillBubble : MonoBehaviour
             {
                 // アニメーション終了後にスキル発動処理をコールバックで呼ぶ
                 onComplete?.Invoke();
+                contentRenderer.enabled = false;
+                contentRenderer.color = new Color(1f, 1f, 1f, 1f);
             });
     }
 

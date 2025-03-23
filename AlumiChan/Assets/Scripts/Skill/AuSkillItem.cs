@@ -10,7 +10,8 @@ public class AuSkillItem : MonoBehaviour
 		if (collision.gameObject.CompareTag("Player"))
 		{
 			//ƒAƒCƒeƒ€æ‚Á‚½ˆ—
-			collision.gameObject.GetComponent<PlayerController>();
+			collision.gameObject.GetComponent<PlayerController>().SetSkill("Au");
+			
 			Destroy(this.gameObject);
 		}
 	}

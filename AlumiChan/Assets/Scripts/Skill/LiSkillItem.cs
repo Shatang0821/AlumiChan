@@ -9,6 +9,8 @@ public class LiSkillItem : MonoBehaviour
 		//íœ.
 		if (collision.gameObject.CompareTag("Player"))
 		{
+			//ƒAƒCƒeƒ€æ‚Á‚½ˆ—
+			collision.gameObject.GetComponent<PlayerController>().SetSkill("Li");
 			Destroy(this.gameObject);
 		}
 	}

@@ -67,6 +67,8 @@ public class PlayerController : MonoBehaviour
 	[SerializeField]
 	private GameObject FeContainer;
 
+	[SerializeField]
+	private SkillUIController skillUIController;
 	void Start()
 	{
 		// Rigidbody2Dコンポーネントを取得.
@@ -128,6 +130,11 @@ public class PlayerController : MonoBehaviour
 			_animator.SetBool("Jump",false);
 			_nextAnimator.SetBool("Jump",false);
 		}
+	}
+
+	public void SetSkill(string skillName)
+	{
+		skillUIController.SetSkillHave(skillName);
 	}
 
 	/// <summary>
@@ -334,13 +341,15 @@ public class PlayerController : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Z))
 		{
+			Debug.Log("ExecuteSkill");
 			currentSkill.Execute(this);
 		}
 	}
 
-	private void ResetSkill()
+	public void ResetSkill()
 	{
-		
+		currentSkill?.ResetSkill(this);
+		currentSkill = null;
 	}
 
 	/// <summary>
