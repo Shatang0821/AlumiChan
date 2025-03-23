@@ -342,7 +342,10 @@ public class PlayerController : MonoBehaviour
 		if(Input.GetKeyDown(KeyCode.Z))
 		{
 			Debug.Log("ExecuteSkill");
-			currentSkill.Execute(this);
+			if (currentSkill != null)
+			{
+				currentSkill.Execute(this);
+			}
 		}
 	}
 
