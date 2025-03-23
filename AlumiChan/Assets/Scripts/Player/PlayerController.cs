@@ -166,7 +166,7 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public void SetJumpPower()
 	{
-		jumpPower = 20;
+		jumpPower = 15;
 	}
 	/// <summary>
 	/// リチウムスキルリターン.
