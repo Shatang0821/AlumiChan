@@ -35,6 +35,11 @@ public class EnemyMove : MonoBehaviour
         }        
         transform.position += new Vector3(transform.forward.z * speed * Time.deltaTime, 0, 0);//移動処理
         Debug.Log(facingDir);
+
+        //↓アニメーターのトリガーをオンにする処理
+        //Animator animator = GetComponent<Animator>();
+        //animator.SetTrigger("sleeptrigger");
+
     }
 
     // ↓地面チェック
