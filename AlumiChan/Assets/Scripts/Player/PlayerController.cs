@@ -56,17 +56,18 @@ public class PlayerController : MonoBehaviour
 	private bool Ground = false;      // 地面に接しているかどうか.
 	private bool Jumping = false;     // ジャンプ中かどうかを追跡するフラグ.
 	private bool KnockedBack = false; // ノックバック中かどうかを管理.
-	
-	// スキル関連
-	//private bool LiSkillJigi = false; // リチウムスキルが使えるのかのフラグ.
-	//private bool hasExecuted = false; //　Executedが使えているかどうか.
-	//private bool electricityjigi = false;//電気が使えているか.
-	//private bool feSkillJigi = false; // 磁力使えるか
 
 	private SkillBase currentSkill;
 	[SerializeField]
 	private GameObject FeContainer;
 
+	[SerializeField]
+	private SkillUIController skillUIController;
+	
+	[SerializeField]
+	private AudioData moveAudioData;
+	[SerializeField]
+	private AudioData jumpAudioData;
 	void Start()
 	{
 		// Rigidbody2Dコンポーネントを取得.
@@ -130,6 +131,11 @@ public class PlayerController : MonoBehaviour
 		}
 	}
 
+	public void SetSkill(string skillName)
+	{
+		skillUIController.SetSkillHave(skillName);
+	}
+
 	/// <summary>
 	/// ジャンプ.
 	/// </summary>
@@ -143,6 +149,7 @@ public class PlayerController : MonoBehaviour
 			Jumping = true;
 			_animator.SetBool("Jump",true);
 			_nextAnimator.SetBool("Jump",false);
+			AudioManager.Instance.PlaySFX(jumpAudioData);
 		}
 
 		if (Jumping)
@@ -166,14 +173,14 @@ public class PlayerController : MonoBehaviour
 	/// </summary>
 	public void SetJumpPower()
 	{
-		jumpPower = 20;
+		jumpPower = 15;
 	}
 	/// <summary>
 	/// リチウムスキルリターン.
 	/// </summary>
 	public void ResetPower()
 	{
-		jumpPower = 10;
+		jumpPower = 12;
 	}
 
 	/// <summary>
@@ -334,13 +341,18 @@ public class PlayerController : MonoBehaviour
 	{
 		if(Input.GetKeyDown(KeyCode.Z))
 		{
-			currentSkill.Execute(this);
+			Debug.Log("ExecuteSkill");
+			if (currentSkill != null)
+			{
+				currentSkill.Execute(this);
+			}
 		}
 	}
 
-	private void ResetSkill()
+	public void ResetSkill()
 	{
-		
+		currentSkill?.ResetSkill(this);
+		currentSkill = null;
 	}
 
 	/// <summary>

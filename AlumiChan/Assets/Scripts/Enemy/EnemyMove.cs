@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Burst.CompilerServices;
+using Unity.VisualScripting;
 using UnityEngine;
 using static UnityEngine.UI.Image;
 
@@ -36,12 +37,18 @@ public class EnemyMove : MonoBehaviour
         transform.position += new Vector3(transform.forward.z * speed * Time.deltaTime, 0, 0);//移動処理
         Debug.Log(facingDir);
 
-        //↓アニメーターのトリガーをオンにする処理
-        //Animator animator = GetComponent<Animator>();
-        //animator.SetTrigger("sleeptrigger");
-
     }
-
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            //アニメーションが流れきったらまた動き出す
+            Animator animator = GetComponent<Animator>();
+            animator.SetTrigger("sleep");
+            speed = 0.0f;
+        }
+    }
+    
     // ↓地面チェック
     public virtual bool IsGroundDetected() => Physics2D.Raycast(groundCheck.position, Vector2.down, groundCheckDistance, whatIsGround);
 
