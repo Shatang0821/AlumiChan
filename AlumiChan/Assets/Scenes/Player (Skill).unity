@@ -2554,9 +2554,6 @@ MonoBehaviour:
   jumpAudioData:
     audioClip: {fileID: 8300000, guid: dee8829e2f68a954a91ea5e48bdb02ce, type: 3}
     volueme: 1
-  ingroundAudioData:
-    audioClip: {fileID: 8300000, guid: d550b7070dd2a8542a49acb79aee3f71, type: 3}
-    volueme: 1
 --- !u!50 &2055107677
 Rigidbody2D:
   serializedVersion: 4
@@ -2693,14 +2690,14 @@ SceneRoots:
   m_Roots:
   - {fileID: 1130187062}
   - {fileID: 1264221133}
-  - {fileID: 156918382}
   - {fileID: 2055107675}
   - {fileID: 320678192}
   - {fileID: 883594248}
+  - {fileID: 1367718389}
+  - {fileID: 156918382}
   - {fileID: 1801073288}
   - {fileID: 604413926}
   - {fileID: 589987189}
   - {fileID: 18302590}
   - {fileID: 698846953}
   - {fileID: 1012865607586125505}
-  - {fileID: 1367718389}
